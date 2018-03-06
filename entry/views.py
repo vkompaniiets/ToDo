@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
-from django.template.response import TemplateResponse
-from django.views import View
+from django.views.generic.base import TemplateView
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -10,8 +10,14 @@ from entry.models import Entry
 from entry.serializers import EntrySerializer
 
 
-class EntriesView(View):
-    pass
+@method_decorator(login_required, name='dispatch')
+class EntriesView(TemplateView):
+    template_name = 'todo.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(EntriesView, self).get_context_data(**kwargs)
+        context['entries'] = Entry.objects.all()
+        return context
 
 
 @login_required
@@ -23,12 +29,6 @@ def create(request):
         entry = Entry(name=name, is_done=False)  # новый таск не может быть сразу выполненым
         entry.save()
     return JsonResponse({'status': 'success'}, status=status.HTTP_201_CREATED)
-
-
-@login_required
-def show_all(request):
-    entries = Entry.objects.all()
-    return TemplateResponse(request, 'todo.html', {'entries': entries})
 
 
 @login_required
