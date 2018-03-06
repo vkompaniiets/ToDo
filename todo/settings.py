@@ -42,6 +42,12 @@ INSTALLED_APPS = [
     'rest_framework',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    )
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -85,6 +91,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'da9oj2oobmfm65',
+    #     'USER': 'pcjmfkjefhywtn',
+    #     'PASSWORD': '67d94b9114966b966733636e61edd217c884796e65fc3d252f1390bc5b338f47',
+    #     'HOST': 'ec2-54-221-207-184.compute-1.amazonaws.com',
+    #     'PORT': '5432',
+    # }
 }
 
 

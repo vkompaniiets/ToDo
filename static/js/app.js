@@ -11,11 +11,15 @@ $(document).ready(function() {
 	/*************** AJAX ***************/
 	var sendPostQuery = function(url, data) {
 		return $.ajax({
-		    headers: { "X-CSRFToken": jQuery("[name=csrfmiddlewaretoken]").val() },
+		    headers: {
+                'X-CSRFToken': jQuery('[name=csrfmiddlewaretoken]').val() ,
+                'Accept': 'application/json',
+		    },
   			type: "POST",
   			url: url,
-  			data: data,
-  			dataType: 'json'
+  			data: JSON.stringify(data),
+  			dataType: 'json',
+  			contentType: 'application/json; charset=utf-8'
 		});
 	}
 
@@ -178,7 +182,8 @@ $(document).ready(function() {
         var id = last_id + 1;
         var name = $('#task_name' + id).val();
         var answer = sendPostQuery(routing.createTask, {
-            'name': name
+            'name': name,
+            'is_done': 'False'
         });
 
         answer.success(function(data) {
