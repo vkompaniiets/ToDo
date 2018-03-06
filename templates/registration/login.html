@@ -1,0 +1,43 @@
+{% extends "main.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<h2 align="center" style="padding-bottom: 40px">Login</h2>
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            {% if form.errors %}
+                <p align="center" class="text-danger">Please enter a correct username and password</p>
+            {% endif %}
+
+            {% if next %}
+                {% if user.is_authenticated %}
+                    <p>Your account doesn't have access to this page. To proceed,
+                    please login with an account that has access.</p>
+                {% else %}
+                    <p>Please login to see this page.</p>
+                {% endif %}
+            {% endif %}
+
+            <form class="form-horizontal" method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+
+                <div class="form-group" align="center">
+                  <td>{{ form.username.label_tag }}</td>
+                    <td>{{ form.username }}</td>
+                </div>
+
+                <div class="form-group" align="center">
+                  <td>{{ form.password.label_tag }}</td>
+                  <td>{{ form.password }}</td>
+                </div>
+
+                <div align="center">
+                  <input type="submit" value="Log In" class="btn btn-primary"/>
+                  <input type="hidden" name="next" value="{{ next }}" />
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,10 +1,17 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.template.response import TemplateResponse
-from django.urls import reverse
-from django.shortcuts import get_object_or_404
-from django.views.decorators.csrf import csrf_exempt
+from django.views import View
+
+from rest_framework import status
+from rest_framework.response import Response
+
 from entry.models import Entry
+from entry.serializers import EntrySerializer
+
+
+class EntriesView(View):
+    pass
 
 
 @login_required
@@ -12,10 +19,10 @@ def create(request):
     if request.is_ajax():
         name = request.POST.get('name', None)
         if len(name) < 4:
-            return JsonResponse({'status': 'error', 'error': 'Error: Name must have at least 4 characters!'})
+            return Response({'status': 'error', 'error': 'Error: Name must have at least 4 characters!'})
         entry = Entry(name=name, is_done=False)  # новый таск не может быть сразу выполненым
         entry.save()
-    return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'success'}, status=status.HTTP_201_CREATED)
 
 
 @login_required
